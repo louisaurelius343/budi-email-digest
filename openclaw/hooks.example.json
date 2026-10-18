@@ -1,0 +1,9 @@
+{
+  "hooks": {
+    "enabled": true,
+    "token": "${OPENCLAW_HOOK_TOKEN}",
+    "path": "/hooks",
+    "allowedAgentIds": ["main"],
+    "allowRequestSessionKey": false
+  }
+}

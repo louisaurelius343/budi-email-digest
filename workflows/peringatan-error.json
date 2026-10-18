@@ -1,0 +1,86 @@
+{
+  "updatedAt": "2026-10-18T01:43:54.476Z",
+  "createdAt": "2026-10-18T01:37:08.823Z",
+  "id": "bHiU1MRarnOo7DDm",
+  "name": "Peringatan Error",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "255c873e-6df0-4507-926f-5b90a861ed48",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:18789/hooks/agent",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Idempotency-Key",
+              "value": "=error-{{ $json.execution.id }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ message: 'Kirim pesan ini apa adanya, tanpa tambahan: ⚠️ Workflow \"' + $json.workflow.name + '\" gagal di node \"' + $json.execution.lastNodeExecuted + '\": ' + ($json.execution.error?.message || 'tanpa pesan error'), name: 'n8n-error', agentId: 'main', deliver: true, channel: 'whatsapp', to: '+62XXXXXXXXXX' }) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "83845b63-7983-4090-934b-ebce2f35516b",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "aRkT4nQjIlEdfmoC",
+          "name": "Header Auth account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "meta": null,
+  "nodeGroups": [],
+  "versionId": "36096e42-d227-43e2-8691-0095d32f758c",
+  "activeVersionId": "36096e42-d227-43e2-8691-0095d32f758c",
+  "versionCounter": 14,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "versionMetadata": {
+    "name": "Version 1.0",
+    "description": ""
+  }
+}
