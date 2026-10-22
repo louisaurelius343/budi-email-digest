@@ -77,3 +77,19 @@ docker/
 
 - Aplikasi OAuth Google masih dalam mode Testing, jadi akun Gmail perlu login ulang setiap 7 hari.
 - Model AI yang murah kadang gagal menjalankan tugas multi-langkah (membuat dan mengirim PDF). Model yang lebih kuat lebih andal.
+
+## Workflow tambahan: Mention Teams
+
+`workflows/mention-teams.json` memantau email notifikasi Microsoft Teams (mention, pengumuman) setiap 15 menit, lalu Budi mengirim ringkasan singkat ke WhatsApp. Pengumuman perubahan jadwal atau tugas ditandai ⚠️.
+
+```mermaid
+flowchart LR
+    T[Microsoft Teams<br/>mention / pengumuman] -->|email notifikasi| K[Email kampus]
+    K -->|filter forward| G[Gmail]
+    G --> N[n8n Gmail Trigger<br/>tiap 15 menit]
+    N --> C[Code: susun prompt]
+    C --> B[Budi / OpenClaw]
+    B --> W[WhatsApp]
+```
+
+**Keterbatasan:** notifikasi tugas baru (Assignments) tidak dikirim lewat email oleh Teams, jadi belum tertangkap. Percobaan dengan Power Automate (trigger *new channel message*, kirim email) berhasil menangkap postingan, tetapi email ditolak Gmail sebagai spam karena kebijakan domain kampus. Ini masih dalam eksplorasi.
